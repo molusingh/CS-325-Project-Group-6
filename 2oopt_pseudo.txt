@@ -12,9 +12,39 @@ struct vertex{
 	int y;
 }
 
+/*-----------------------CLASSES-----------------*/
+
+class city{
+	public:
+		bool isCandidate();
+		int getX();
+		int getY();
+		// int getLocation();??????/
+	private:
+		int x;
+		int y;
+		bool candidate;
+}
+
+class route{
+	public:
+		int getDistance();
+		void addCity();
+		city* getCity(int)
+
+	private:
+		vector<city*> cities();
+}
+
 int main(){
 
-	//start with some route to operate swaps upon
+	/*
+		start with some route to operate swaps upon
+		this can literally read input in order and make that the initial route.
+		we are assuming the graph is initially complete and are looking to define
+		a route as a simple graph where every vertex has degree 2
+	*/
+
 	vertex* route = findAnyRoute();
 	int iter = 0;
 	n = num of cities;
