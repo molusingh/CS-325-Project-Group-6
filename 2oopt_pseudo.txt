@@ -1,0 +1,63 @@
+/*I still need to figure out how to decide which vertices are candidates
+for swap unless we simply wish to iterate through all of them.
+
+functions: we need a distance(), routeLength(), findAnyroute(), input(), output(), findCandidates(), others???
+*/
+
+/*We are still using structs for C but it may be beneficial to modify this.*/
+//struct to hold city info
+struct vertex{
+	char id;
+	int x;
+	int y;
+}
+
+int main(){
+
+	//start with some route to operate swaps upon
+	vertex* route = findAnyRoute();
+	int iter = 0;
+	n = num of cities;
+
+	//while designing we can test against the cases she gave us to get desired number of iterations
+	while(routeLength(route)/solution > 1.25){
+		//considert the distance of the starting route the best
+		optimum = routeLength(route);
+		//for each pair of cities, perform swaps on them to "uncross any edges"
+		for(i = 0; i < n; i++){
+			for(j = 0; j < n; j++){
+				newRoute = swap(route, i, j);
+				//calculate the distance of the new route anmd store if it is an imporvement
+				newDistance = routeLength(newRoute);
+				if(newDistance < optimum){
+					route = newRoute
+				}
+			}
+		}
+		
+		iter++;
+	}
+	print(optimum, route);
+}
+
+vertex* swap(vertex* E, vertex* i, vertex* j{
+	char tmp[];
+	for(idx = 0; idx < i; idx++){
+		tmp[idx] = E[idx]
+	}
+	for(idx = k; idx > i-1 j; idx--){
+		tmp[i + (k-idx)] = E[i + (k - idx)]
+	}
+	for(idx = k; idx < E.length(); idx++){
+		tmp[idx] = E[idx]	
+	}
+	return tmp;
+})
+
+int routeLength(vertex* route){
+	//find distance of route listed in vertex array;
+}
+
+findAnyRoute(){
+	//find a hamilton cycle? or just some cycle that hits all cities
+}
