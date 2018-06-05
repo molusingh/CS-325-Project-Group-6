@@ -20,6 +20,8 @@ struct city {
 
 vector<city*> getInput(string fileName);
 void outputResults(string fileName, vector<city*> route); 
+int distance(city* a, city* b); 
+int length(vector<city*> route);
 
 vector<city*> getInput(string fileName) {
 
@@ -51,8 +53,8 @@ void outputResults(string fileName, vector<city*> route) {
 	ofstream outputFile;
 	outputFile.open(fileName);
 
-	// print size of the route
-	outputFile << route.size() << endl;
+	// print length of the route
+	outputFile << length(route) << endl;
 
 	// print the qualities of each city in route (in order)
 	for (int i = 0; i < route.size(); i++) {
@@ -64,6 +66,18 @@ void outputResults(string fileName, vector<city*> route) {
 
 }
 
+int distance(city* a, city* b) {
+	return sqrt((((*b).x - (*a).x)*((*b).x - (*a).x)) + (((*b).y - (*a).y)*((*b).y - (*a).y))); 
+}  
+
+int length(vector<city*> route) { 
+	int m = 0; 
+	for (int idx = 1; idx < route.size(); idx++) {
+		m += distance(route.at(idx - 1), route.at(idx)); 
+	} 
+
+	m += distance(route.at(route.size()-1), route[0]); 
+}
 
 int main() {
 
