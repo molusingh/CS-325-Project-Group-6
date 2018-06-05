@@ -91,3 +91,64 @@ int routeLength(vertex* route){
 findAnyRoute(){
 	//find a hamilton cycle? or just some cycle that hits all cities
 }
+
+/****************************NEW PSEUDO***************************************/
+
+#include<fstream>
+#include<string.h>
+#include<vector>
+#include<math>
+
+struct city{
+	int id;
+	int x;
+	int y;
+}
+
+double? int? distance(city*, city*);
+double? int? length(route*);
+
+swap(city*, city*, route*);
+int main(){
+
+	/*__________________Get Input_________________*/
+	string inputFile = argv[2];
+
+	route = vector<city*>;
+
+	std::ifstream input("inputFile");
+
+	int id, x, y;
+	while(input >> id >> x >>y){
+		city* newCity = city(id, x, y);
+		route.push(newCity*);
+
+	}
+
+	/*___________________Perform 2-Opt______________*/
+
+		//see code link
+
+	/*____________________Write Solution_____________*/
+	std::ofstream output(""inputFile"+".tour")
+	fprintf("%d\n" route.length(), output);
+	for(i in route){
+		fprintf("%d %d %d\n", i.id, i.x, i.y, output);
+	}
+}
+
+double? int? distance(city* a, city* b){
+	return sqrt([(b.x-a.x)*(b.x-a.x)] + [(b.y-a.y)*(b.y-a.y)]);
+}
+
+double? int? length(route* route){
+	int l = 0;
+	for(idx = 1; idx < route.size; idx++){
+		l += distance(route.at(idx-1), route.at(idx));
+	}
+	l += distance(route.at(route.size), route.begin());
+}
+
+swap(city*, city*){
+	//see code link
+}

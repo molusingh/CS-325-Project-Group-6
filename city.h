@@ -10,7 +10,6 @@ class city {
 public:
 	city();
 	~city();
-	bool isCandidate();
 	int getID();
 	int getX();
 	int getY();

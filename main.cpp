@@ -7,20 +7,14 @@
 int main() {
 
 	// open the input file
-	ifstream input_file("data.input");
-	// open the output file
-	ofstream output_file("data.output"); 
+	ifstream input_file("data.input"); 
 
 	// check for successful opening
 	if (!input_file.is_open()) {
 		cout << "Error: Input File could not be opened." << endl;
 		return 1;
 	}
-	// check for successful opening
-	if (!output_file.is_open()) { 
-		cout << "Error: Output file could not be opened." << endl;
-		return 1;
-	}
+
 	// read as 
 
 	// read file
@@ -42,6 +36,14 @@ int main() {
 	// call 2-opt
 	//output 
 
+	// open the output file
+	ofstream output_file("data.output");
+	
+	// check for successful opening
+	if (!output_file.is_open()) { 
+		cout << "Error: Output file could not be opened." << endl;
+		return 1;
+	}
 	// close file
 	output_file.close();
 
