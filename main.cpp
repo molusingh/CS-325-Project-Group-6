@@ -1,3 +1,9 @@
+/*
+ * CS 325 Project Group 6
+ * Members: Jacob Garcia, Anmolbir Mann, Natasha Kvalve, Matthew Krilanovich
+ * Description: implementation of otp-2 on TSP problem
+ */
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -14,6 +20,9 @@ using std::ofstream;
 
 using namespace std;
 
+/*
+ * city struct definition
+ */
 struct city {
 	int id;
 	int x;
@@ -21,11 +30,17 @@ struct city {
 };
 typedef struct city city;
 
-vector<city*> getInput(string fileName);
-void outputResults(string fileName, vector<city*> route); 
-int distance(city* a, city* b); 
-int length(vector<city*> route);
+// function prototypes
+vector<city*> getInput(string);
+void outputResults(string, vector<city*>); 
+int distance(city*, city*); 
+int length(vector<city*>);
+vector<city*> optSwap(int, int, vector<city*>);
+vector<city*> twoOpt(vector<city*>);
 
+/*
+ * Returns a route from the inputed file
+ */
 vector<city*> getInput(string fileName) {
 
 	// open the input file
@@ -50,6 +65,9 @@ vector<city*> getInput(string fileName) {
 	return route;
 }
 
+/*
+ * Outputs the inputed route to a the given file
+ */
 void outputResults(string fileName, vector<city*> route) {
 
 	// open the output file
@@ -69,10 +87,16 @@ void outputResults(string fileName, vector<city*> route) {
 
 }
 
+/*
+ * Returns the distance between two cities
+ */
 int distance(city* a, city* b) {
 	return sqrt((((*b).x - (*a).x)*((*b).x - (*a).x)) + (((*b).y - (*a).y)*((*b).y - (*a).y))); 
 }  
 
+/*
+ * Returns the length of the inputed route
+ */
 int length(vector<city*> route) { 
 	int m = 0; 
 	for (int idx = 1; idx < route.size(); idx++) {
@@ -84,6 +108,9 @@ int length(vector<city*> route) {
 	return m; 
 }
 
+/*
+ * opt swap helper function
+ */
 vector<city*> optSwap(int i, int j, vector<city*> route){
 	vector<city*> newTour;
 
@@ -100,6 +127,9 @@ vector<city*> optSwap(int i, int j, vector<city*> route){
 	return newTour;
 }
 
+/*
+ * 2 opt algorithm
+ */
 vector<city*> twoOpt(vector<city*> route){
 
 	int improvements = 0;
@@ -123,6 +153,9 @@ vector<city*> twoOpt(vector<city*> route){
 	return *bestRoute;
 }
 
+/*
+ * Main program, runs what's displayed above
+ */
 int main() {
 
 	// get filename
@@ -145,4 +178,5 @@ int main() {
 }
 
 // Reference:
-// L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
+// L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." 
+// College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
