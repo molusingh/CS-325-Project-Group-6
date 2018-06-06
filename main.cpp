@@ -115,11 +115,10 @@ void outputResults(string fileName, vector<city*> route) {
  * Returns the distance between two cities
  */
 int distance(city* a, city* b) {
-	if (a == NULL || b == NULL)
+	if (a == NULL || b == NULL) // error case
 	{
-		// cout << "Tring to calculate distanc of NULL city" << endl;
-		//exit(4);
-		return 0;
+		cout << "Tring to calculate distance of NULL city" << endl;
+		exit(4);
 	}
 	int xDiff = b->x - a->x;
 	int yDiff = b->y - a->y;
@@ -145,13 +144,13 @@ int length(vector<city*> route) {
  * opt swap helper function
  */
 vector<city*> optSwap(int i, int j, vector<city*>* route){
-	vector<city*> newTour;
-	cout << i << "," << j << "\t";
-	for (int s = 0; s < route->size(); ++s)
+	if (i > route->size() || j > route->size()) // error case
 	{
-		cout << cityToString(route->at(s)) << "\t";
+		cout << "invalid route!" << endl;
+		exit(5);
 	}
-	cout << endl;
+	
+	vector<city*> newTour;
 
 	for(int idx = 0; idx < i; idx++){
 		newTour.push_back(route->at(idx));
@@ -172,17 +171,16 @@ vector<city*> twoOpt(vector<city*> route){
 
 	int improvements = 0;
 	int shortest = length(route);
-	vector<city*>* bestRoute = &route;
+	vector<city*> bestRoute = route;
 
 	while(improvements < 500){
 		for(int i = 0; i < route.size() -1; i++){
 			for(int j = i; j < route.size(); j++){
-				vector<city*> newRoute = optSwap(i, j, bestRoute);
+				vector<city*> newRoute = optSwap(i, j, &bestRoute);
 				if(length(newRoute) <  shortest){
 					shortest = length(newRoute);
 					improvements = 0;
-					bestRoute = &newRoute;
-					cout << "Switch" << endl;
+					bestRoute = newRoute;
 				}
 				else {
 					improvements++;
@@ -190,7 +188,7 @@ vector<city*> twoOpt(vector<city*> route){
 			}
 		}
 	}
-	return *bestRoute;
+	return bestRoute;
 }
 
 /*
