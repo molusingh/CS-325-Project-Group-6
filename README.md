@@ -5,7 +5,7 @@ Group 6: Anmol, Jacob, Natasha, Matthew
 Directions: 
 
 # compile the program
-g++ -std=c++11 main.cpp -o 2opt
+make default
 
 # run the program 
 ./2opt
@@ -13,5 +13,8 @@ g++ -std=c++11 main.cpp -o 2opt
 # provide the file name when prompted for the TSP problem 
 file_name.txt 
 
-# cat the results file 
+# get results 
 cat file_name.txt.tour
+
+# cleanup 
+make clean
