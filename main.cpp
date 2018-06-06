@@ -8,7 +8,8 @@
 #include <fstream>
 #include <vector>
 #include <string.h>
-#include <cmath> 
+#include <cmath>
+#include <limits>
 
 using std::cin; 
 using std::cout; 
@@ -38,6 +39,7 @@ int distance(city*, city*);
 int length(vector<city*>);
 vector<city*> optSwap(int, int, vector<city*>*);
 vector<city*> twoOpt(vector<city*>);
+vector<city*> nearestNeighbor(vector<city*>);
 
 /*
  * Returns the string value of an inputed city
@@ -173,7 +175,9 @@ vector<city*> twoOpt(vector<city*> route){
 	int shortest = length(route);
 	vector<city*> bestRoute = route;
 
-	while(improvements < 500){
+	int iters = 0;
+	while(shortest > (1.25 * 108159)){
+		iters++;
 		for(int i = 0; i < route.size() -1; i++){
 			for(int j = i; j < route.size(); j++){
 				vector<city*> newRoute = optSwap(i, j, &bestRoute);
@@ -188,6 +192,7 @@ vector<city*> twoOpt(vector<city*> route){
 			}
 		}
 	}
+	cout << "iters:" << iters << endl;
 	return bestRoute;
 }
 
@@ -204,9 +209,10 @@ int main() {
 
 	// get input from file specified, save in route
 	vector<city*> route = getInput(inputFile);
+	vector<city*> greedyRoute	= nearestNeighbor(route);
 
 	// implement algorithm
-	vector<city*> bestRoute = twoOpt(route);
+	vector<city*> bestRoute = twoOpt(greedyRoute);
 
 
 	// output results to file
@@ -224,3 +230,44 @@ int main() {
 // Reference:
 // L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." 
 // College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
+
+
+vector<city*> nearestNeighbor(vector<city*> route){
+	//the vector to return and a vector of the same size as route
+	//in order to track which cities have been pushed to greedyRoute
+	vector<city*> greedyRoute;
+	vector<int> visited;
+	for(int idx = 0; idx < route.size(); idx++){
+		visited.push_back(0);
+	}
+
+	//grab the first city and mark it as visited
+	greedyRoute.push_back(route.at(0));
+	visited.at(0) = 1;
+
+	//loop route.size()-1 times (thats how many cities still need to be grabbed)
+	//each iteration, find min distance between a city still in route and the last
+	//city pushed to greedyroute
+	int minDist, minIdx;
+
+	for(int i = 1; i < route.size(); i++){
+		minDist = numeric_limits<double>::infinity();
+		minIdx	= -1;
+		for(int j = 1; j < route.size(); i++){
+			if(visited.at(j) == 0 && distance(greedyRoute.at(i-1), route.at(j)) < minDist){
+				minDist = distance(greedyRoute.at(i-1), route.at(j));
+				minIdx = j;
+			}
+		}
+		visited.at(minIdx) = 1;
+		greedyRoute.push_back(route.at(minIdx));
+	}
+
+	//debug makes sure loop runs appropriate number of times
+	if(route.size() != greedyRoute.size()){
+		cout << "nearestNeighbor	not catching all cities in original tour" << endl;
+		exit(2);
+	}
+
+	return greedyRoute;
+}
