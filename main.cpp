@@ -79,7 +79,9 @@ int length(vector<city*> route) {
 		m += distance(route.at(idx - 1), route.at(idx)); 
 	} 
 
-	m += distance(route.at(route.size()-1), route.at(0)); 
+	m += distance(route.at(route.size()-1), route.at(0));
+
+	return m; 
 }
 
 vector<city*> optSwap(int i, int j, vector<city*> route){

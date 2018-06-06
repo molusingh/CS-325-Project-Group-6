@@ -5,7 +5,7 @@ Group 6: Anmol, Jacob, Natasha, Matthew
 Directions: 
 
 # compile the program
-make default
+make 
 
 # run the program 
 ./2opt
