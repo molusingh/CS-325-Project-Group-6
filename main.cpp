@@ -209,10 +209,12 @@ int main() {
 
 	// get input from file specified, save in route
 	vector<city*> route = getInput(inputFile);
-	vector<city*> greedyRoute	= nearestNeighbor(route);
+
+	//vector<city*> greedyRoute	= nearestNeighbor(route);
 
 	// implement algorithm
-	vector<city*> bestRoute = twoOpt(greedyRoute);
+	//!!!! don't forget to pass greedyRoute if nearestNeighbor has been run!!!!!
+	vector<city*> bestRoute = twoOpt(route);
 
 
 	// output results to file
