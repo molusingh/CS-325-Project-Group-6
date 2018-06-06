@@ -45,8 +45,16 @@ vector<city*> getInput(string fileName) {
 
 	// open the input file
 	ifstream inputFile;
+
 	inputFile.open(fileName);
 
+	// if failed to open file
+	if(!inputFile.is_open())
+	{
+		cout << "Failed to open file " << fileName << endl;
+		exit(3);
+		
+	}
 	// create empty route to store information 
 	vector<city*> route; 
 	
@@ -54,9 +62,9 @@ vector<city*> getInput(string fileName) {
 	int id, x, y;
 	while (inputFile >> id >> x >> y) {
 		city* newCity = new city;
-		(*newCity).id = id;
-		(*newCity).x = x;
-		(*newCity).y = y;
+		newCity->id = id;
+		newCity->x = x;
+		newCity->y = y;
 		route.push_back(newCity);
 	}
 	inputFile.close();
@@ -79,7 +87,8 @@ void outputResults(string fileName, vector<city*> route) {
 
 	// print the qualities of each city in route (in order)
 	for (int i = 0; i < route.size(); i++) {
-		outputFile << (*route[i]).id << " " << (*route[i]).x << " " << (*route[i]).y << endl;
+		outputFile << route[i]->id << " " << route[i]->x << " ";
+		outputFile << route[i]->y << endl;
 	}
 	
 	// close file
@@ -91,7 +100,7 @@ void outputResults(string fileName, vector<city*> route) {
  * Returns the distance between two cities
  */
 int distance(city* a, city* b) {
-	return sqrt((((*b).x - (*a).x)*((*b).x - (*a).x)) + (((*b).y - (*a).y)*((*b).y - (*a).y))); 
+	return sqrt(((b->x - a->x)*(b->x - a->x)) + ((b->y - a->y)*(b->y - a->y))); 
 }  
 
 /*
@@ -123,7 +132,6 @@ vector<city*> optSwap(int i, int j, vector<city*> route){
 	for(int idx = j+1; idx < route.size(); idx++){
 		newTour.push_back(route.at(idx));
 	}
-
 	return newTour;
 }
 
@@ -144,7 +152,8 @@ vector<city*> twoOpt(vector<city*> route){
 					shortest = length(newRoute);
 					improvements = 0;
 					bestRoute = &newRoute;
-				}else{
+				}
+				else {
 					improvements++;
 				}
 			}
@@ -154,7 +163,7 @@ vector<city*> twoOpt(vector<city*> route){
 }
 
 /*
- * Main program, runs what's displayed above
+ * Main program, runs programmed described above
  */
 int main() {
 
@@ -173,6 +182,12 @@ int main() {
 
 	// output results to file
 	outputResults(outputFile, bestRoute); 
+
+	int routeSize = route.size();
+	for (int i = 0; i < routeSize; ++i)
+	{
+		delete route.at(i);
+	}
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++11
+CFLAGS = -g -std=c++11
 
 default: 2opt
 
@@ -9,3 +9,4 @@ default: 2opt
 .PHONY : clean
 clean: 
 	rm -f 2opt
+	rm -f *.tour
