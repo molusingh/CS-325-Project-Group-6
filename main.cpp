@@ -17,13 +17,15 @@ using std::string;
 using std::vector; 
 using std::ifstream;
 using std::ofstream;
+using std::round;
 
 using namespace std;
 
 /*
  * city struct definition
  */
-struct city {
+struct city 
+{
 	int id;
 	int x;
 	int y;
@@ -57,8 +59,8 @@ string cityToString(city* input)
 /*
  * Returns a route from the inputed file
  */
-vector<city*> getInput(string fileName) {
-
+vector<city*> getInput(string fileName) 
+{
 	// open the input file
 	ifstream inputFile;
 
@@ -92,8 +94,8 @@ vector<city*> getInput(string fileName) {
 /*
  * Outputs the inputed route to a the given file
  */
-void outputResults(string fileName, vector<city*> route) {
-
+void outputResults(string fileName, vector<city*> route) 
+{
 	// open the output file
 	ofstream outputFile;
 	outputFile.open(fileName);
@@ -114,7 +116,8 @@ void outputResults(string fileName, vector<city*> route) {
 /*
  * Returns the distance between two cities
  */
-int distance(city* a, city* b) {
+int distance(city* a, city* b) 
+{
 	if (a == NULL || b == NULL) // error case
 	{
 		cout << "Tring to calculate distance of NULL city" << endl;
@@ -122,14 +125,15 @@ int distance(city* a, city* b) {
 	}
 	int xDiff = b->x - a->x;
 	int yDiff = b->y - a->y;
-	return sqrt((xDiff * xDiff) + (yDiff * yDiff)); 
+	return round(sqrt((xDiff * xDiff) + (yDiff * yDiff))); 
 }  
 
 
 /*
  * Returns the length of the inputed route
  */
-int length(vector<city*> route) { 
+int length(vector<city*> route)
+{ 
 	int m = 0; 
 	for (int idx = 1; idx < route.size(); idx++) {
 		m += distance(route.at(idx - 1), route.at(idx)); 
@@ -143,7 +147,8 @@ int length(vector<city*> route) {
 /*
  * opt swap helper function
  */
-vector<city*> optSwap(int i, int j, vector<city*>* route){
+vector<city*> optSwap(int i, int j, vector<city*>* route)
+{
 	if (i > route->size() || j > route->size()) // error case
 	{
 		cout << "invalid route!" << endl;
@@ -167,8 +172,8 @@ vector<city*> optSwap(int i, int j, vector<city*>* route){
 /*
  * 2 opt algorithm
  */
-vector<city*> twoOpt(vector<city*> route){
-
+vector<city*> twoOpt(vector<city*> route)
+{
 	int improvements = 0;
 	int shortest = length(route);
 	vector<city*> bestRoute = route;
@@ -194,12 +199,22 @@ vector<city*> twoOpt(vector<city*> route){
 /*
  * Main program, runs programmed described above
  */
-int main() {
-
-	// get filename
-	cout << "Please input file name: " << endl; 
+int main(int argc, char** argv) 
+{
 	string inputFile, outputFile;
-	cin >> inputFile; 
+
+	if (argc >= 2) // if argument with filename passed
+	{
+		inputFile = argv[1];
+	}
+
+	else // if no command line arguments
+	{
+		// get filename	
+		cout << "Please input file name: " << endl; 
+		cin >> inputFile; 
+	}
+
 	outputFile = inputFile + ".tour";
 
 	// get input from file specified, save in route
