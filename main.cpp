@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <string>
+#include <string.h>
 #include <cmath> 
 
 using std::cin; 
@@ -11,6 +11,8 @@ using std::string;
 using std::vector; 
 using std::ifstream;
 using std::ofstream;
+
+using namespace std;
 
 struct city {
 	int id;
@@ -76,7 +78,46 @@ int length(vector<city*> route) {
 		m += distance(route.at(idx - 1), route.at(idx)); 
 	} 
 
-	m += distance(route.at(route.size()-1), route[0]); 
+	m += distance(route.at(route.size()-1), route.at(0)); 
+}
+
+vector<city*> optSwap(int i, int j, vector<city*> route){
+	vector<city*> newTour;
+
+	for(int idx = 0; idx < i; idx++){
+		newTour.push_back(route.at(idx));
+	}
+	for(int idx = i; idx <= j; idx++){
+		newTour.push_back(route.at(j - (idx - i)));
+	}
+	for(int idx = j+1; idx < route.size(); idx++){
+		newTour.push_back(route.at(idx));
+	}
+
+	return newTour;
+}
+
+vector<city*> twoOpt(vector<city*> route){
+
+	int improvements = 0;
+	int shortest = length(route);
+	vector<city*>* bestRoute = &route;
+
+	while(improvements < 500){
+		for(int i = 0; i < route.size() -1; i++){
+			for(int j = i; j < route.size(); j++){
+				vector<city*> newRoute = optSwap(i, j, *bestRoute);
+				if(length(newRoute) <  shortest){
+					shortest = length(newRoute);
+					improvements = 0;
+					bestRoute = &newRoute;
+				}else{
+					improvements++;
+				}
+			}
+		}
+	}
+	return *bestRoute;
 }
 
 int main() {
@@ -89,11 +130,13 @@ int main() {
 
 	// get input from file specified, save in route
 	vector<city*> route = getInput(inputFile);
-	
+
 	// implement algorithm
+	vector<city*> bestRoute = twoOpt(route);
+
 
 	// output results to file
-	outputResults(outputFile, route); 
+	outputResults(outputFile, bestRoute); 
 
 	return 0;
 }
