@@ -31,12 +31,28 @@ struct city {
 typedef struct city city;
 
 // function prototypes
+string cityToString(city*);
 vector<city*> getInput(string);
 void outputResults(string, vector<city*>); 
 int distance(city*, city*); 
 int length(vector<city*>);
-vector<city*> optSwap(int, int, vector<city*>);
+vector<city*> optSwap(int, int, vector<city*>*);
 vector<city*> twoOpt(vector<city*>);
+
+/*
+ * Returns the string value of an inputed city
+ */
+string cityToString(city* input)
+{
+	string toReturn = "NULL";
+	string space(" ");
+	if (input != NULL)
+	{
+		toReturn = to_string(input->id) + space + to_string(input->x) + space;
+		toReturn += to_string(input->y); 
+	}
+	return toReturn;
+}
 
 /*
  * Returns a route from the inputed file
@@ -87,8 +103,7 @@ void outputResults(string fileName, vector<city*> route) {
 
 	// print the qualities of each city in route (in order)
 	for (int i = 0; i < route.size(); i++) {
-		outputFile << route[i]->id << " " << route[i]->x << " ";
-		outputFile << route[i]->y << endl;
+		outputFile << cityToString(route.at(i)) << endl;
 	}
 	
 	// close file
@@ -100,8 +115,17 @@ void outputResults(string fileName, vector<city*> route) {
  * Returns the distance between two cities
  */
 int distance(city* a, city* b) {
-	return sqrt(((b->x - a->x)*(b->x - a->x)) + ((b->y - a->y)*(b->y - a->y))); 
+	if (a == NULL || b == NULL)
+	{
+		// cout << "Tring to calculate distanc of NULL city" << endl;
+		//exit(4);
+		return 0;
+	}
+	int xDiff = b->x - a->x;
+	int yDiff = b->y - a->y;
+	return sqrt((xDiff * xDiff) + (yDiff * yDiff)); 
 }  
+
 
 /*
  * Returns the length of the inputed route
@@ -120,17 +144,23 @@ int length(vector<city*> route) {
 /*
  * opt swap helper function
  */
-vector<city*> optSwap(int i, int j, vector<city*> route){
+vector<city*> optSwap(int i, int j, vector<city*>* route){
 	vector<city*> newTour;
+	cout << i << "," << j << "\t";
+	for (int s = 0; s < route->size(); ++s)
+	{
+		cout << cityToString(route->at(s)) << "\t";
+	}
+	cout << endl;
 
 	for(int idx = 0; idx < i; idx++){
-		newTour.push_back(route.at(idx));
+		newTour.push_back(route->at(idx));
 	}
 	for(int idx = i; idx <= j; idx++){
-		newTour.push_back(route.at(j - (idx - i)));
+		newTour.push_back(route->at(j - (idx - i)));
 	}
-	for(int idx = j+1; idx < route.size(); idx++){
-		newTour.push_back(route.at(idx));
+	for(int idx = j+1; idx < route->size(); idx++){
+		newTour.push_back(route->at(idx));
 	}
 	return newTour;
 }
@@ -147,11 +177,12 @@ vector<city*> twoOpt(vector<city*> route){
 	while(improvements < 500){
 		for(int i = 0; i < route.size() -1; i++){
 			for(int j = i; j < route.size(); j++){
-				vector<city*> newRoute = optSwap(i, j, *bestRoute);
+				vector<city*> newRoute = optSwap(i, j, bestRoute);
 				if(length(newRoute) <  shortest){
 					shortest = length(newRoute);
 					improvements = 0;
 					bestRoute = &newRoute;
+					cout << "Switch" << endl;
 				}
 				else {
 					improvements++;
