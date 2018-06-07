@@ -16,6 +16,7 @@
 #include <string.h>
 #include <cmath>
 #include <limits>
+#include <sstream>
 
 using std::cin; 
 using std::cout; 
@@ -27,6 +28,7 @@ using std::ofstream;
 using std::round;
 using std::to_string;
 using std::numeric_limits;
+using std::stringstream;
 
 /*
  * city struct definition
@@ -46,7 +48,7 @@ void outputResults(string, vector<city*>);
 int distance(city*, city*); 
 int length(vector<city*>);
 vector<city*> optSwap(int, int, vector<city*>*);
-vector<city*> twoOpt(vector<city*>);
+vector<city*> twoOpt(vector<city*>, int);
 vector<city*> nearestNeighbor(vector<city*>);
 
 /*
@@ -56,9 +58,21 @@ int main(int argc, char** argv)
 {
 	string inputFile, outputFile;
 
+	int iterations = 1; // number of 2opt iterations
+
 	if (argc >= 2) // if argument with filename passed
 	{
 		inputFile = argv[1];
+		if (argc >= 3)
+		{
+			string iterationsString(argv[2]);
+			stringstream stream(iterationsString);
+			stream >> iterations;
+			if (iterations <= 0) // invalid argument
+			{
+				iterations = 1;
+			}
+		}
 	}
 
 	else // if no command line arguments
@@ -75,7 +89,7 @@ int main(int argc, char** argv)
 
 	vector<city*> greedyRoute = nearestNeighbor(route);
 
-	vector<city*> bestRoute = twoOpt(greedyRoute);
+	vector<city*> bestRoute = twoOpt(greedyRoute, iterations);
 
 
 	// output results to file
@@ -240,7 +254,7 @@ vector<city*> optSwap(int i, int j, vector<city*>* route)
  * 2 opt algorithm
  * reference [2]
  */
-vector<city*> twoOpt(vector<city*> route)
+vector<city*> twoOpt(vector<city*> route, int iterations)
 {
 	// initialize variables keeping track of shortest/best route 
 	int improvements = 0;
@@ -248,7 +262,7 @@ vector<city*> twoOpt(vector<city*> route)
 	vector<city*> bestRoute = route;
 
 	int iters = 0;
-	while(iters < 1){     
+	while(iters < iterations){     
 		iters++;
 
 		// for each city in route, compare to other cities up to that position 	
