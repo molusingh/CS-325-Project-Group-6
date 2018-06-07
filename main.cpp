@@ -91,7 +91,7 @@ int main(int argc, char** argv)
 
 	vector<city*> bestRoute = greedyRoute;
 
-	if (route.size() < 5000) // if problem size isn't too big
+	if (route.size() < 2000) // if problem size isn't too big
 	{
 		bestRoute = twoOpt(greedyRoute, iterations);
 	}
