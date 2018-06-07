@@ -50,6 +50,47 @@ vector<city*> twoOpt(vector<city*>);
 vector<city*> nearestNeighbor(vector<city*>);
 
 /*
+ * Main program, runs programmed described above
+ */
+int main(int argc, char** argv) 
+{
+	string inputFile, outputFile;
+
+	if (argc >= 2) // if argument with filename passed
+	{
+		inputFile = argv[1];
+	}
+
+	else // if no command line arguments
+	{
+		// get filename	
+		cout << "Please input file name: " << endl; 
+		cin >> inputFile; 
+	}
+
+	outputFile = inputFile + ".tour";
+
+	// get input from file specified, save in route
+	vector<city*> route = getInput(inputFile);
+
+	vector<city*> greedyRoute = nearestNeighbor(route);
+
+	vector<city*> bestRoute = twoOpt(greedyRoute);
+
+
+	// output results to file
+	outputResults(outputFile, bestRoute); 
+
+	int routeSize = route.size();
+	for (int i = 0; i < routeSize; ++i)
+	{
+		delete route.at(i);
+	}
+
+	return 0;
+}
+
+/*
  * Returns the string value of an inputed city
  */
 string cityToString(city* input)
@@ -207,7 +248,7 @@ vector<city*> twoOpt(vector<city*> route)
 	vector<city*> bestRoute = route;
 
 	int iters = 0;
-	while(shortest > (1.25 * 108159)){     
+	while(iters < 1){     
 		iters++;
 
 		// for each city in route, compare to other cities up to that position 	
@@ -232,47 +273,6 @@ vector<city*> twoOpt(vector<city*> route)
 	}
 	cout << "iters:" << iters << endl;
 	return bestRoute;
-}
-
-/*
- * Main program, runs programmed described above
- */
-int main(int argc, char** argv) 
-{
-	string inputFile, outputFile;
-
-	if (argc >= 2) // if argument with filename passed
-	{
-		inputFile = argv[1];
-	}
-
-	else // if no command line arguments
-	{
-		// get filename	
-		cout << "Please input file name: " << endl; 
-		cin >> inputFile; 
-	}
-
-	outputFile = inputFile + ".tour";
-
-	// get input from file specified, save in route
-	vector<city*> route = getInput(inputFile);
-
-	vector<city*> greedyRoute = nearestNeighbor(route);
-
-	vector<city*> bestRoute = twoOpt(greedyRoute);
-
-
-	// output results to file
-	outputResults(outputFile, bestRoute); 
-
-	int routeSize = route.size();
-	for (int i = 0; i < routeSize; ++i)
-	{
-		delete route.at(i);
-	}
-
-	return 0;
 }
 
 /*
