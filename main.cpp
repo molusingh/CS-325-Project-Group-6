@@ -117,8 +117,7 @@ string cityToString(city* input)
 	string space(" ");
 	if (input != NULL)
 	{
-		toReturn = to_string(input->id) + space + to_string(input->x) + space;
-		toReturn += to_string(input->y); 
+		toReturn = to_string(input->id); 
 	}
 	return toReturn;
 }
