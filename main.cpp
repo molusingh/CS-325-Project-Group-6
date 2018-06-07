@@ -25,6 +25,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 using std::round;
+using std::to_string;
+using std::numeric_limits;
 
 /*
  * city struct definition
