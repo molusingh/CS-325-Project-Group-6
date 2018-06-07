@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 {
 	string inputFile, outputFile;
 
-	int iterations = 1; // number of 2opt iterations
+	int iterations = 1; // number of 2opt iterations, default is 1
 
 	if (argc >= 2) // if argument with filename passed
 	{
@@ -70,7 +70,7 @@ int main(int argc, char** argv)
 			stream >> iterations;
 			if (iterations <= 0) // invalid argument
 			{
-				iterations = 1;
+				iterations = 1; // reset to default
 			}
 		}
 	}
@@ -262,6 +262,10 @@ vector<city*> twoOpt(vector<city*> route, int iterations)
 	vector<city*> bestRoute = route;
 
 	int iters = 0;
+	if (route.size() > 10000)
+	{
+		iterations = 0;
+	}
 	while(iters < iterations){     
 		iters++;
 
