@@ -208,15 +208,20 @@ vector<city*> twoOpt(vector<city*> route)
 	while(shortest > (1.25 * 108159)){     
 		iters++;
 
-		//  	
+		// for each city in route, compare to other cities up to that position 	
 		for(int i = 0; i < route.size() -1; i++){
 			for(int j = i; j < route.size(); j++){
+	
+				// perform an optSwap between 2 cities to find possible new route
 				vector<city*> newRoute = optSwap(i, j, &bestRoute);
+
+				// if the new route has a shorter length, update our tracker variables 	
 				if(length(newRoute) <  shortest){
 					shortest = length(newRoute);
 					improvements = 0;
 					bestRoute = newRoute;
 				}
+				// otherwise, we need to try more improvements
 				else {
 					improvements++;
 				}
