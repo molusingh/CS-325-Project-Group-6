@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 	if (argc >= 2) // if argument with filename passed
 	{
 		inputFile = argv[1];
-		if (argc >= 3)
+		if (argc >= 3) // if iterations passed as a command line argument
 		{
 			string iterationsString(argv[2]);
 			stringstream stream(iterationsString);
@@ -89,8 +89,12 @@ int main(int argc, char** argv)
 
 	vector<city*> greedyRoute = nearestNeighbor(route);
 
-	vector<city*> bestRoute = twoOpt(greedyRoute, iterations);
+	vector<city*> bestRoute = greedyRoute;
 
+	if (route.size() < 5000) // if problem size isn't too big
+	{
+		bestRoute = twoOpt(greedyRoute, iterations);
+	}
 
 	// output results to file
 	outputResults(outputFile, bestRoute); 
@@ -262,10 +266,6 @@ vector<city*> twoOpt(vector<city*> route, int iterations)
 	vector<city*> bestRoute = route;
 
 	int iters = 0;
-	if (route.size() > 10000)
-	{
-		iterations = 0;
-	}
 	while(iters < iterations){     
 		iters++;
 
