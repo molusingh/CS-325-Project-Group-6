@@ -1,6 +1,6 @@
 /*
  * CS 325 Project Group 6
- * Members: Jacob Garcia, Anmolbir Mann, Natasha Kvalve, Matthew Krilanovich
+ * Members: Jacob Garcia, Anmolbir Mann, Natasha Kvavle, Matthew Krilanovich
  * Description: implementation of otp-2 on TSP problem
  */
 
