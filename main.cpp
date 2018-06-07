@@ -4,6 +4,10 @@
  * Description: implementation of otp-2 on TSP problem
  */
 
+// Reference:
+// L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." 
+// College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -225,11 +229,9 @@ int main(int argc, char** argv)
 	// get input from file specified, save in route
 	vector<city*> route = getInput(inputFile);
 
-	//vector<city*> greedyRoute	= nearestNeighbor(route);
+	vector<city*> greedyRoute = nearestNeighbor(route);
 
-	// implement algorithm
-	//!!!! don't forget to pass greedyRoute if nearestNeighbor has been run!!!!!
-	vector<city*> bestRoute = twoOpt(route);
+	vector<city*> bestRoute = twoOpt(greedyRoute);
 
 
 	// output results to file
@@ -244,34 +246,33 @@ int main(int argc, char** argv)
 	return 0;
 }
 
-// Reference:
-// L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." 
-// College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
-
-
+/*
+ * Nearest Neighbor Algorithm for TSP
+ */
 vector<city*> nearestNeighbor(vector<city*> route){
 	//the vector to return and a vector of the same size as route
 	//in order to track which cities have been pushed to greedyRoute
 	vector<city*> greedyRoute;
-	vector<int> visited;
+	vector<bool> visited;
 	for(int idx = 0; idx < route.size(); idx++){
-		visited.push_back(0);
+		visited.push_back(false);
 	}
 
 	//grab the first city and mark it as visited
 	greedyRoute.push_back(route.at(0));
-	visited.at(0) = 1;
+	visited.at(0) = true;
 
 	//loop route.size()-1 times (thats how many cities still need to be grabbed)
-	//each iteration, find min distance between a city still in route and the last
-	//city pushed to greedyroute
-	int minDist, minIdx;
+	//each iteration, find min distance between a city still in route and the 
+	// last city pushed to greedyroute
+	int minDist, minIdx, dist;
 
 	for(int i = 1; i < route.size(); i++){
-		minDist = numeric_limits<double>::infinity();
+		minDist = numeric_limits<int>::max();
 		minIdx	= -1;
-		for(int j = 1; j < route.size(); i++){
-			if(visited.at(j) == 0 && distance(greedyRoute.at(i-1), route.at(j)) < minDist){
+		for(int j = 1; j < route.size(); j++){
+			dist = distance(greedyRoute.at(i-1), route.at(j));
+			if(!visited.at(j) &&  dist < minDist){
 				minDist = distance(greedyRoute.at(i-1), route.at(j));
 				minIdx = j;
 			}
@@ -282,7 +283,8 @@ vector<city*> nearestNeighbor(vector<city*> route){
 
 	//debug makes sure loop runs appropriate number of times
 	if(route.size() != greedyRoute.size()){
-		cout << "nearestNeighbor	not catching all cities in original tour" << endl;
+		cout << "nearestNeighbor not catching all cities in original tour";
+		cout << endl;
 		exit(2);
 	}
 
