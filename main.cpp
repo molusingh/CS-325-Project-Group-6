@@ -4,9 +4,11 @@
  * Description: implementation of otp-2 on TSP problem
  */
 
-// Reference:
-// L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." 
-// College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
+// References:
+// [1]  L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." 
+// 	College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
+// [2]  "C++ Implementation of 2-opt to the "Att48" Travelling Salesman Problem," technical-recipes.com, April 20, 2012, [Online]. 
+// 	Available: www.technical-recipes.com/2012/applying-c-implementations-of-2-opt-to-travelling-salesman-problems/. [Accessed: June 5, 2018].  	
 
 #include <iostream>
 #include <fstream>
@@ -23,8 +25,6 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 using std::round;
-
-using namespace std;
 
 /*
  * city struct definition
@@ -64,6 +64,7 @@ string cityToString(city* input)
 
 /*
  * Returns a route from the inputed file
+ * reference [1]
  */
 vector<city*> getInput(string fileName) 
 {
@@ -99,6 +100,7 @@ vector<city*> getInput(string fileName)
 
 /*
  * Outputs the inputed route to a the given file
+ * reference [1]
  */
 void outputResults(string fileName, vector<city*> route) 
 {
@@ -124,13 +126,18 @@ void outputResults(string fileName, vector<city*> route)
  */
 int distance(city* a, city* b) 
 {
-	if (a == NULL || b == NULL) // error case
+	// error case: when cities are null
+	if (a == NULL || b == NULL) 
 	{
 		cout << "Tring to calculate distance of NULL city" << endl;
 		exit(4);
 	}
+
+	// get difference in x and y coordinates 
 	int xDiff = b->x - a->x;
 	int yDiff = b->y - a->y;
+
+	// pythagorean theorem (rounded) to find distance 	
 	return round(sqrt((xDiff * xDiff) + (yDiff * yDiff))); 
 }  
 
@@ -141,10 +148,14 @@ int distance(city* a, city* b)
 int length(vector<city*> route)
 { 
 	int m = 0; 
+
+	// iterate through route 
+	// sum up the distance between city and previous city
 	for (int idx = 1; idx < route.size(); idx++) {
 		m += distance(route.at(idx - 1), route.at(idx)); 
 	} 
 
+	// add the distance between final and first city 
 	m += distance(route.at(route.size()-1), route.at(0));
 
 	return m; 
@@ -152,10 +163,12 @@ int length(vector<city*> route)
 
 /*
  * opt swap helper function
+ * reference [2] 
  */
 vector<city*> optSwap(int i, int j, vector<city*>* route)
 {
-	if (i > route->size() || j > route->size()) // error case
+	// error case: indices are outside of route / invalid
+	if (i > route->size() || j > route->size()) 
 	{
 		cout << "invalid route!" << endl;
 		exit(5);
@@ -163,12 +176,17 @@ vector<city*> optSwap(int i, int j, vector<city*>* route)
 	
 	vector<city*> newTour;
 
+	// append new route/tour with cities up to index i  
 	for(int idx = 0; idx < i; idx++){
 		newTour.push_back(route->at(idx));
 	}
+
+	// append new route/tour with cities from indexes j to i (backwards)  
 	for(int idx = i; idx <= j; idx++){
 		newTour.push_back(route->at(j - (idx - i)));
 	}
+
+	// append new route/tour with cities from indices j+1 to end of route
 	for(int idx = j+1; idx < route->size(); idx++){
 		newTour.push_back(route->at(idx));
 	}
@@ -177,16 +195,20 @@ vector<city*> optSwap(int i, int j, vector<city*>* route)
 
 /*
  * 2 opt algorithm
+ * reference [2]
  */
 vector<city*> twoOpt(vector<city*> route)
 {
+	// initialize variables keeping track of shortest/best route 
 	int improvements = 0;
 	int shortest = length(route);
 	vector<city*> bestRoute = route;
 
 	int iters = 0;
-	while(shortest > (1.25 * 108159)){
+	while(shortest > (1.25 * 108159)){     
 		iters++;
+
+		//  	
 		for(int i = 0; i < route.size() -1; i++){
 			for(int j = i; j < route.size(); j++){
 				vector<city*> newRoute = optSwap(i, j, &bestRoute);
