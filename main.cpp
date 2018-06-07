@@ -17,6 +17,8 @@
 #include <cmath>
 #include <limits>
 #include <sstream>
+#include <time.h>
+#include <stdio.h>
 
 using std::cin; 
 using std::cout; 
@@ -56,6 +58,9 @@ vector<city*> nearestNeighbor(vector<city*>);
  */
 int main(int argc, char** argv) 
 {
+	// start clock
+	clock_t t;
+	t = clock();
 	string inputFile, outputFile;
 
 	int iterations = 1; // number of 2opt iterations, default is 1
@@ -98,7 +103,10 @@ int main(int argc, char** argv)
 
 	// output results to file
 	outputResults(outputFile, bestRoute); 
-
+        // track time
+	t = clock() - t;
+	printf("Total time: %f seconds\n", ((float)t)/CLOCKS_PER_SEC);
+	
 	int routeSize = route.size();
 	for (int i = 0; i < routeSize; ++i)
 	{
