@@ -3,6 +3,7 @@
 #include<string>
 #include<fstream>
 #include <cmath>
+#include<algorithm>
 
 using namespace std;
 
@@ -52,20 +53,21 @@ int main(int argc, char** argv){
 	int minI = -1;
 	int minJ = -1;
 	int minLength = routeLength;
-	for(int i = 1; i < route.size() -2; i++){
-		for(int j = i; j < route.size()-1; j++){
+	for(int i = 0; i < route.size() -1; i++){
+		for(int j = i; j < route.size(); j++){
 
-			//conditionals aren't done
-			if(i==0 && j = route.size()){
+			if(i==0 && j == route.size()){
 				thisLength = routeLength;
 			}
 			else if( i == 0){
 				thisLength = routeLength;
-				thisLength -= distMatrix.at(i)->at(route.size()) - distMatrix.at(j)->at(j+1);
-				thisLength += distMatrix.at(j)->at(route.size()) + distMatrix.at(i)->at(route.size());
+				thisLength -= (distMatrix.at(i)->at(route.size()) - distMatrix.at(j)->at(j+1));
+				thisLength += (distMatrix.at(j)->at(route.size()) + distMatrix.at(i)->at(route.size()));
 			}
 			else if(j == route.size()){
-				/////////////////////////////////////////////////////////////////////////////
+				thisLength = routeLength;
+				thisLength -= distMatrix.at(j)->at(0) - distMatrix.at(i)->at(i-1);
+				thisLength += distMatrix.at(i)->at(0) + distMatrix.at(j)->at(i-1);
 			}
 			else{
 				thisLength = routeLength;
@@ -78,15 +80,34 @@ int main(int argc, char** argv){
 				minJ = j;
 				minLength = thisLength;
 			}
-
 		}
 	}
 
+	/*__________________________Perform the appropriate swap on the cities____________________________________________*/
+	
+	vector<city*> newRoute;
+	if(minI != -1 && minJ != -1){
 
-	/*______________________________________Destroy distance array ____________________________________________________*/
+		// append new route/tour with cities up to index i  
+		for(int idx = 0; idx < minI; idx++){
+			newRoute.push_back(route.at(idx));
+		}
 
-	for(int i = 0; i < route.size(); i++){
-		delete distMatrix.at(i);
+		// append new route/tour with cities from indexes j to i (backwards)  
+		for(int idx = minI; idx <= minJ; idx++){
+			newRoute.push_back(route.at(minJ - (idx - minI)));
+		}
+
+		// append new route/tour with cities from indices j+1 to end of route
+		for(int idx = minJ+1; idx < route.size(); idx++){
+			newRoute.push_back(route.at(idx));
+		}
+
+		/*______________________________________Destroy distance array ____________________________________________________*/
+
+		for(int i = 0; i < route.size(); i++){
+			delete distMatrix.at(i);
+		}
 	}
 
 	/*_____________________________________Output and free memory associated with route_______________________________*/
@@ -94,8 +115,9 @@ int main(int argc, char** argv){
 	ofstream output;
 	output.open(outputFile);
 
+	output << minLength << endl;
 	for(int i = 0; i < route.size(); i++){
-		output << route.at(i)->id  << " " << route.at(i)->x  << " " << route.at(i)->y << endl;
+		output << newRoute.at(i)->id  << " " << newRoute.at(i)->x  << " " << newRoute.at(i)->y << endl;
 	}
 
 	return 0;
