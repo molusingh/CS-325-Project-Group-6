@@ -1,2 +1,0 @@
-iters:10
-Total time: 1.150000 seconds
