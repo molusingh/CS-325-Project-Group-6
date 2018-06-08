@@ -9,8 +9,10 @@ make
 
 # run the program 
 ./2opt
+./2opt inputFile
 
-# provide the file name when prompted for the TSP problem 
+# provide the file name when prompted for the TSP problem, if inputFile not provided
+# as a command line argument
 file_name.txt 
 
 # get results 
