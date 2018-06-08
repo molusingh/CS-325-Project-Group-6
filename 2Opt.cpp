@@ -56,15 +56,15 @@ int main(int argc, char** argv){
 	for(int i = 0; i < route.size() -1; i++){
 		for(int j = i; j < route.size(); j++){
 
-			if(i==0 && j == route.size()){
+			if(i==0 && j == route.size()-1){
 				thisLength = routeLength;
 			}
 			else if( i == 0){
 				thisLength = routeLength;
-				thisLength -= (distMatrix.at(i)->at(route.size()) - distMatrix.at(j)->at(j+1));
-				thisLength += (distMatrix.at(j)->at(route.size()) + distMatrix.at(i)->at(route.size()));
+				thisLength -= (distMatrix.at(i)->at(route.size()-1) - distMatrix.at(j)->at(j+1));
+				thisLength += (distMatrix.at(j)->at(route.size()-1) + distMatrix.at(i)->at(route.size()-1));
 			}
-			else if(j == route.size()){
+			else if(j == route.size()-1){
 				thisLength = routeLength;
 				thisLength -= distMatrix.at(j)->at(0) - distMatrix.at(i)->at(i-1);
 				thisLength += distMatrix.at(i)->at(0) + distMatrix.at(j)->at(i-1);
@@ -108,6 +108,8 @@ int main(int argc, char** argv){
 		for(int i = 0; i < route.size(); i++){
 			delete distMatrix.at(i);
 		}
+	}else{
+		newRoute = route;
 	}
 
 	/*_____________________________________Output and free memory associated with route_______________________________*/
