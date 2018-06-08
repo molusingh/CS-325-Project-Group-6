@@ -96,11 +96,16 @@ int main(int argc, char** argv)
 
 	vector<city*> bestRoute = greedyRoute;
 
-	if (route.size() < 2000) // if problem size isn't too big
+	// if route is less than 2000 and we care about time, use 2opt
+	if (argv[2] == "3" && route.size() < 2000) // if problem size isn't too big
 	{
 		bestRoute = twoOpt(greedyRoute, iterations);
 	}
 
+	// if we don't care about time, use 2opt
+	else if (argv[2] == "unlimited") {
+		bestRoute = twoOpt(greedyRoute, iterations); 
+	}  
 	// output results to file
 	outputResults(outputFile, bestRoute); 
         // track time
