@@ -274,7 +274,7 @@ vector<city*> twoOpt(vector<city*> route, int iterations)
 		iters++;
 
 		// for each city in route, compare to other cities up to that position 	
-		for(int i = 1; i < size -1; i++){
+		for(int i = 0; i < size -1; i++){
 			for(int j = i; j < size - 1; j++){
 	
 				// find length of potential swap route
