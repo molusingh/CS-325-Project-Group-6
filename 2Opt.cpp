@@ -124,8 +124,8 @@ int main(int argc, char** argv){
 
 	output << minLength << endl;
 	for(int i = 0; i < route.size(); i++){
-		output << newRoute.at(i)->id  << " " << newRoute.at(i)->x  << " " << newRoute.at(i)->y << endl;
-		delete route.at(i);
+		output << newRoute.at(i)->id  << endl;
+		// delete route.at(i);
 	}
 
 	return 0;
