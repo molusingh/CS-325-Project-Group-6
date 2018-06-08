@@ -65,7 +65,8 @@ int main(int argc, char** argv)
 	t = clock();
 	string inputFile, outputFile;
 
-	int iterations = 1; // number of 2opt iterations, default is 1
+	int iterations = 10; // number of 2opt iterations, default is 2
+	// need 2 iterations to get 1.25 approx results for example 1
 
 	if (argc >= 2) // if argument with filename passed
 	{
@@ -77,7 +78,7 @@ int main(int argc, char** argv)
 			stream >> iterations;
 			if (iterations <= 0) // invalid argument
 			{
-				iterations = 1; // reset to default
+				iterations = 10; // reset to default
 			}
 		}
 	}
@@ -94,14 +95,10 @@ int main(int argc, char** argv)
 	// get input from file specified, save in route
 	vector<city*> route = getInput(inputFile);
 
-	vector<city*> greedyRoute = nearestNeighbor(route); // perform NN
-
-	vector<city*> bestRoute = greedyRoute;
-
-	bestRoute = twoOpt(greedyRoute, iterations); // perform 2OPT 
+	route = twoOpt(nearestNeighbor(route), iterations); // NN, then 2OPT
 
 	// output results to file
-	outputResults(outputFile, bestRoute); 
+	outputResults(outputFile, route); 
         // track time
 	t = clock() - t;
 	printf("Total time: %f seconds\n", ((float)t)/CLOCKS_PER_SEC);
@@ -268,7 +265,6 @@ vector<city*> twoOpt(vector<city*> route, int iterations)
 {
 	int size = route.size();
 	// initialize variables keeping track of shortest/best route 
-	int improvements = 0;
 	int shortest = length(route);
 	int newLength; // length of a potential swapped route
 	vector<city*> bestRoute = route;
@@ -316,7 +312,6 @@ vector<city*> twoOpt(vector<city*> route, int iterations)
 				// if the new route has a shorter length, perform opt swap
 				if(newLength <  shortest){
 					shortest = newLength;
-					improvements = 0;
 					bestRoute = optSwap(i, j, &bestRoute);
 				}
 			}

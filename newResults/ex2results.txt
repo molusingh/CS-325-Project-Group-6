@@ -1,2 +1,2 @@
-iters:1
-Total time: 0.020000 seconds
+iters:10
+Total time: 0.090000 seconds
