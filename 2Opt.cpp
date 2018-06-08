@@ -69,9 +69,10 @@ int main(int argc, char** argv){
 				thisLength -= distMatrix.at(j)->at(0) - distMatrix.at(i)->at(i-1);
 				thisLength += distMatrix.at(i)->at(0) + distMatrix.at(j)->at(i-1);
 			}
+
 			else{
 				thisLength = routeLength;
-				thisLength -= distMatrix.at(i)->at(i-1) - distMatrix.at(j)->at(j+1);
+				thisLength -= distMatrix.at(i)->at(i-1) + distMatrix.at(j)->at(j+1);
 				thisLength += distMatrix.at(i)->at(j+1) + distMatrix.at(j)->at(i-1);
 			}
 
@@ -86,8 +87,8 @@ int main(int argc, char** argv){
 	/*__________________________Perform the appropriate swap on the cities____________________________________________*/
 	
 	vector<city*> newRoute;
-	if(minI != -1 && minJ != -1){
-
+	if(minI != -1 && minJ != -1)
+	{
 		// append new route/tour with cities up to index i  
 		for(int idx = 0; idx < minI; idx++){
 			newRoute.push_back(route.at(idx));
@@ -108,8 +109,12 @@ int main(int argc, char** argv){
 		for(int i = 0; i < route.size(); i++){
 			delete distMatrix.at(i);
 		}
-	}else{
+	}
+	
+	else
+	{
 		newRoute = route;
+		cout << "hello" << endl;
 	}
 
 	/*_____________________________________Output and free memory associated with route_______________________________*/
