@@ -61,12 +61,12 @@ int main(int argc, char** argv){
 			}
 			else if( i == 0){
 				thisLength = routeLength;
-				thisLength -= (distMatrix.at(i)->at(route.size()-1) - distMatrix.at(j)->at(j+1));
+				thisLength -= (distMatrix.at(i)->at(route.size()-1) + distMatrix.at(j)->at(j+1));
 				thisLength += (distMatrix.at(j)->at(route.size()-1) + distMatrix.at(i)->at(route.size()-1));
 			}
 			else if(j == route.size()-1){
 				thisLength = routeLength;
-				thisLength -= distMatrix.at(j)->at(0) - distMatrix.at(i)->at(i-1);
+				thisLength -= distMatrix.at(j)->at(0) + distMatrix.at(i)->at(i-1);
 				thisLength += distMatrix.at(i)->at(0) + distMatrix.at(j)->at(i-1);
 			}
 
