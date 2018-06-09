@@ -13,4 +13,3 @@ valgrind: 2opt
 clean: 
 	rm -f 2opt
 	rm -f *.tour
-	rm -f 2Opt
