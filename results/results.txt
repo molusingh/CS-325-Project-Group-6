@@ -1,0 +1,31 @@
+g++ -g -std=c++11 main.cpp -o 2opt
+example1
+iters:10
+Total time: 0.000000 seconds
+example2
+iters:10
+Total time: 0.080000 seconds
+example3
+iters:10
+Total time: 308.500000 seconds
+test1
+iters:10
+Total time: 0.000000 seconds
+test2
+iters:10
+Total time: 0.010000 seconds
+test3
+iters:10
+Total time: 0.080000 seconds
+test4
+iters:10
+Total time: 0.300000 seconds
+test5
+iters:10
+Total time: 1.320000 seconds
+test6
+iters:10
+Total time: 5.340000 seconds
+test7
+iters:10
+Total time: 32.020000 seconds

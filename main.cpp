@@ -7,8 +7,10 @@
 // References:
 // [1]  L. Zhang. CS 162. Class Lecture, Topic: "File I/O part 1." 
 // 	College of Engineering, Oregon State University, Corvallis, OR., Feb. 2017.
-// [2]  "C++ Implementation of 2-opt to the "Att48" Travelling Salesman Problem," technical-recipes.com, April 20, 2012, [Online]. 
-// 	Available: www.technical-recipes.com/2012/applying-c-implementations-of-2-opt-to-travelling-salesman-problems/. [Accessed: June 5, 2018].  	
+// [2]  "C++ Implementation of 2-opt to the "Att48" Travelling Salesman Problem,"
+//  technical-recipes.com, April 20, 2012, [Online]. 
+// 	Available: www.technical-recipes.com/2012/applying-c-implementations-of-2-
+// opt-to-travelling-salesman-problems/. [Accessed: June 5, 2018].  	
 
 #include <iostream>
 #include <fstream>
@@ -63,7 +65,8 @@ int main(int argc, char** argv)
 	t = clock();
 	string inputFile, outputFile;
 
-	int iterations = 1; // number of 2opt iterations, default is 1
+	int iterations = 10; // number of 2opt iterations, default is 2
+	// need 2 iterations to get 1.25 approx results for example 1
 
 	if (argc >= 2) // if argument with filename passed
 	{
@@ -75,7 +78,7 @@ int main(int argc, char** argv)
 			stream >> iterations;
 			if (iterations <= 0) // invalid argument
 			{
-				iterations = 1; // reset to default
+				iterations = 10; // reset to default
 			}
 		}
 	}
@@ -92,17 +95,10 @@ int main(int argc, char** argv)
 	// get input from file specified, save in route
 	vector<city*> route = getInput(inputFile);
 
-	vector<city*> greedyRoute = nearestNeighbor(route);
-
-	vector<city*> bestRoute = greedyRoute;
-
-	if (route.size() < 2000) // if problem size isn't too big
-	{
-		bestRoute = twoOpt(greedyRoute, iterations);
-	}
+	route = twoOpt(nearestNeighbor(route), iterations); // NN, then 2OPT
 
 	// output results to file
-	outputResults(outputFile, bestRoute); 
+	outputResults(outputFile, route); 
         // track time
 	t = clock() - t;
 	printf("Total time: %f seconds\n", ((float)t)/CLOCKS_PER_SEC);
@@ -267,9 +263,10 @@ vector<city*> optSwap(int i, int j, vector<city*>* route)
  */
 vector<city*> twoOpt(vector<city*> route, int iterations)
 {
+	int size = route.size();
 	// initialize variables keeping track of shortest/best route 
-	int improvements = 0;
 	int shortest = length(route);
+	int newLength; // length of a potential swapped route
 	vector<city*> bestRoute = route;
 
 	int iters = 0;
@@ -277,21 +274,45 @@ vector<city*> twoOpt(vector<city*> route, int iterations)
 		iters++;
 
 		// for each city in route, compare to other cities up to that position 	
-		for(int i = 0; i < route.size() -1; i++){
-			for(int j = i; j < route.size(); j++){
+		for(int i = 0; i < size -1; i++){
+			for(int j = i; j < size - 1; j++){
 	
-				// perform an optSwap between 2 cities to find possible new route
-				vector<city*> newRoute = optSwap(i, j, &bestRoute);
+				// find length of potential swap route
 
-				// if the new route has a shorter length, update our tracker variables 	
-				if(length(newRoute) <  shortest){
-					shortest = length(newRoute);
-					improvements = 0;
-					bestRoute = newRoute;
+				newLength = shortest; // start with current route size
+
+				if (i == 0 && j == size - 1) // edge case nothing happens
+				{
+
 				}
-				// otherwise, we need to try more improvements
-				else {
-					improvements++;
+
+				else if (i == 0) // if i is starting city edge case
+				{
+					newLength -= distance(bestRoute.at(i), bestRoute.at(size - 1))
+						 + distance(bestRoute.at(j), bestRoute.at(j + 1));
+					newLength += distance(bestRoute.at(j), bestRoute.at(size - 1)) 
+						+ distance(bestRoute.at(i), bestRoute.at(size - 1));
+				}
+				else if (j == (size -1)) // if j is last city edge case
+				{
+					newLength -= distance(bestRoute.at(0), bestRoute.at(j))
+						 + distance(bestRoute.at(i), bestRoute.at(i - 1));
+					newLength += distance(bestRoute.at(0), bestRoute.at(i)) 
+						+ distance(bestRoute.at(j), bestRoute.at(i - 1));
+				}
+
+				else // normal case
+				{
+					newLength -= distance(bestRoute.at(i), bestRoute.at(i - 1)) 
+						+ distance(bestRoute.at(j), bestRoute.at(j + 1));
+					newLength += distance(bestRoute.at(i), bestRoute.at(j + 1)) 
+						+ distance(bestRoute.at(i - 1), bestRoute.at(j));
+				}
+
+				// if the new route has a shorter length, perform opt swap
+				if(newLength <  shortest){
+					shortest = newLength;
+					bestRoute = optSwap(i, j, &bestRoute);
 				}
 			}
 		}
